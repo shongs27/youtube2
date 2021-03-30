@@ -1,36 +1,13 @@
 import React from "react";
 import Axios from "axios";
-// import moment from "moment";
 
-// 공부해야할것
 import { Formik } from "formik";
+
 // import * as Yup from "yup";
-import { Form, Input, Bottom, Button } from "antd";
+import { Form, Input, message, Button } from "antd";
+import { USER_SERVER } from "../config";
 
-const formItemLayout = {
-  labelCol: {
-    xs: { span: 24 },
-    sm: { span: 8 },
-  },
-  wrapperCol: {
-    xs: { span: 24 },
-    sm: { span: 16 },
-  },
-};
-const tailFormItemLayout = {
-  wrapperCol: {
-    xs: {
-      span: 24,
-      offset: 0,
-    },
-    sm: {
-      span: 16,
-      offset: 8,
-    },
-  },
-};
-
-function RegisterPage() {
+function RegisterPage(props) {
   return (
     <Formik
       initialValues={{ name: "", password: "", email: "" }}
@@ -52,15 +29,18 @@ function RegisterPage() {
             password: values.password,
             email: values.email,
           };
-          Axios.post("/register", registerForm).then((res) => {
+          Axios.post(`${USER_SERVER}/register`, registerForm).then((res) => {
             if (res.data.try) {
-              console.log("회원등록 성공");
+              message.info("회원등록 성공");
+              props.history.push("/login");
             } else {
-              alert("실패했습니다 빡대가리쉑");
+              console.log(res.data.err);
+              message.info("실패했습니다 빡대가리쉑");
             }
           });
+
           setSubmitting(false);
-        }, 400);
+        }, 1000);
       }}
     >
       {(props) => {
@@ -77,12 +57,9 @@ function RegisterPage() {
         return (
           <div className="app">
             <h2>회원 가입</h2>
-            <Form
-              style={{ minWidth: "375px" }}
-              {...formItemLayout}
-              onSubmit={handleSubmit}
-            >
-              <Form.Item required label="Name">
+
+            <Form onSubmit={handleSubmit}>
+              <Form.Item className="margin" required label="Name">
                 <Input
                   id="name"
                   placeholder="이름 입력해"
@@ -93,7 +70,7 @@ function RegisterPage() {
                 />
               </Form.Item>
 
-              <Form.Item required label="Email">
+              <Form.Item className="margin" required label="Email">
                 <Input
                   id="email"
                   placeholder="이메일 입력해"
@@ -101,21 +78,27 @@ function RegisterPage() {
                   value={values.email}
                   onChange={handleChange}
                   onBlur={handleBlur}
+                  className={
+                    errors.email && touched.email ? "input-border" : ""
+                  }
                 />
+                {errors.email && touched.email && (
+                  <div className="input-feedback">{errors.email}</div>
+                )}
               </Form.Item>
 
-              <Form.Item required label="Password">
+              <Form.Item className="margin" required label="Password">
                 <Input
                   id="password"
                   placeholder="비번 입력해"
                   type="password"
                   value={values.password}
                   onChange={handleChange}
-                  onBlur={handleBlur}
+                  onBlur={handleBlur} //포커스를 잃었을때
                 />
               </Form.Item>
 
-              <Form.Item {...tailFormItemLayout}>
+              <Form.Item>
                 <Button
                   onClick={handleSubmit}
                   type="primary"

@@ -26,6 +26,6 @@ app.use("/", (req, res) => {
   res.send("여기는 서버의 구역입니다");
 });
 
-app.listen(5000, () => {
+app.listen(8080, () => {
   console.log("서버접속 완료");
 });

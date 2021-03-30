@@ -1,3 +1,4 @@
+
 body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
@@ -15,7 +16,34 @@ code {
 .app {
   flex-direction: column;
   display: flex;
-  justify-content: center;
+  /* justify-content: center; */
   align-items: center;
-  height: 100vh;
+  /* height: 100vh; */
+}
+
+.margin {
+  margin-top: 20px;
+}
+
+
+.input-border {
+  border: 3px solid red;
+}
+
+
+.input-feedback {
+  color: red;
+  height: 5px;
+  
+}
+
+/* antd css를 우선하네 */
+.formm {
+  margin-top: 20px;
+}
+
+Button {
+  position: relative;
+  left: 40px;
+  top: 10px;
 }
