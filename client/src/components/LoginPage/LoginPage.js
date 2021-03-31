@@ -2,25 +2,55 @@ import React from "react";
 import Axios from "axios";
 import { Formik, validateYupSchema } from "formik";
 import * as Yup from "yup";
-import { Form, Input, Button, Checkbox } from "antd";
+import { Form, Input, Button, Checkbox, message } from "antd";
+import { Icon } from "antd";
+import { USER_SERVER } from "../config";
+import { set } from "mongoose";
 
-const LoginPage = () => {
+const LoginPage = (props) => {
   return (
     <Formik
       initialValues={{ email: "", password: "" }}
       validationSchema={Yup.object({
         email: Yup.string()
-          .email("타당하지 않은 이메일 형식")
-          .required("입력하라고 새끼야"),
+          .email("이메일 형식 오류")
+          .required("이메일 입력 필요"),
         password: Yup.string()
-          .min(3, "최소 3글자이상은 입력해 개새끼야")
-          .required("입력하지 않으면 못지나간다"),
+          .min(3, "최소 3글자이상은 입력하셈")
+          .required("비밀번호 입력 필요"),
       })}
-      onSubmit={async (values) => {
-        await new Promise((res) => setTimeout(res, 500));
-        alert(JSON.stringify(values, null, 2));
+      onSubmit={(values, { setSubmitting }) => {
+        let LoginForm = {
+          password: values.password,
+          email: values.email,
+        };
+        // foo();
+        // //1번 async await
+        // async function foo() {
+        //   const res = await Axios.post(`${USER_SERVER}/login`, LoginForm);
+        //   if (res.data.try) {
+        //     message.info("로그인 성공");
+        //     // props.history.push("/landing");
+        //   } else {
+        //     console.log(res.data.err);
+        //     message.info("로그인 실패했습니다");
+        //   }
+        //   setSubmitting(false);
+        // }
+
+        // 2번
+        Axios.post(`${USER_SERVER}/login`, LoginForm)
+          .then((res) => {
+            if (res.data.try) {
+              message.info("로그인 성공");
+              // props.history.push("/landing");
+            } else {
+              console.log(res.data.err);
+              message.info("로그인 실패했습니다");
+            }
+          })
+          .then(setSubmitting(false));
       }}
-      // validateYupSchema
     >
       {({
         values,
@@ -33,12 +63,13 @@ const LoginPage = () => {
       }) => (
         <div className="app">
           <h2>로그인</h2>
-          <Form name="Login" onSubmit={handleSubmit}>
+          <Form name="Login">
             <Form.Item
-              hasFeedback
+              required // * 별표시
+              hasFeedback // 테두리
               validateStatus={
                 errors.email && touched.email ? "error" : "success"
-              }
+              } // 불들어오는거
               className="margin"
               label="Email"
               name="email"
@@ -50,6 +81,7 @@ const LoginPage = () => {
               ]}
             >
               <Input
+                prefix={<Icon type="user" />}
                 type="email"
                 name="email"
                 value={values.email}
@@ -90,10 +122,21 @@ const LoginPage = () => {
             <br />
             <Form.Item name="remember" valuePropName="checked">
               <Checkbox>Remember me</Checkbox>
+              &nbsp; &nbsp; &nbsp;
+              <a href="/register" target="_self" style={{ font: "blue" }}>
+                회원가입
+              </a>
             </Form.Item>
 
             <Form.Item>
-              <Button type="primary">Submit</Button>
+              <Button
+                onClick={handleSubmit}
+                disabled={isSubmitting}
+                type="primary"
+                style={{ minWidth: "100%" }}
+              >
+                Submit
+              </Button>
             </Form.Item>
           </Form>
         </div>

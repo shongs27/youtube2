@@ -98,11 +98,12 @@ function RegisterPage(props) {
                 />
               </Form.Item>
 
-              <Form.Item>
+              <Form.Item className="ok">
                 <Button
                   onClick={handleSubmit}
                   type="primary"
                   disabled={isSubmitting}
+                  style={{ minWidth: "100%" }}
                 >
                   제출
                 </Button>

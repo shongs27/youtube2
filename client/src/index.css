@@ -24,11 +24,11 @@ code {
 .margin {
   margin-top: 20px;
 }
-
+/* 
 
 .input-border {
   border: 3px solid red;
-}
+} */
 
 
 .input-feedback {
@@ -42,8 +42,3 @@ code {
   margin-top: 20px;
 }
 
-Button {
-  position: relative;
-  left: 40px;
-  top: 10px;
-}
