@@ -1,13 +1,15 @@
 import React from "react";
-import Axios from "axios";
 
 import { Formik } from "formik";
 
 // import * as Yup from "yup";
 import { Form, Input, message, Button } from "antd";
-import { USER_SERVER } from "../config";
+
+import { useDispatch } from "react-redux";
+import { registerUser } from "../../_redux/user_actions";
 
 function RegisterPage(props) {
+  const dispatch = useDispatch();
   return (
     <Formik
       initialValues={{ name: "", password: "", email: "" }}
@@ -29,18 +31,21 @@ function RegisterPage(props) {
             password: values.password,
             email: values.email,
           };
-          Axios.post(`${USER_SERVER}/register`, registerForm).then((res) => {
-            if (res.data.try) {
-              message.info("회원등록 성공");
-              props.history.push("/login");
-            } else {
-              console.log(res.data.err);
-              message.info("실패했습니다 빡대가리쉑");
-            }
-          });
 
-          setSubmitting(false);
-        }, 1000);
+          dispatch(registerUser(registerForm))
+            .then((res) => {
+              // dispatch 에 결과값은 reducer의 return값이어야 하는거 아닌가?
+              console.log(res);
+              if (res) {
+                message.info("회원등록 성공");
+                props.history.push("/login");
+              } else {
+                console.log(res.data.err);
+                message.info("실패했습니다 빡대가리쉑");
+              }
+            })
+            .then(setSubmitting(false));
+        });
       }}
     >
       {(props) => {

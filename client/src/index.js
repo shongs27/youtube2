@@ -5,10 +5,15 @@ import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import "antd/dist/antd.css";
 
+import { createStore, applyMiddleware } from "redux";
+import promise from "redux-promise";
+import rootReducer from "./_redux";
+import { Provider } from "react-redux";
+
 ReactDOM.render(
-  <React.StrictMode>
+  <Provider store={createStore(rootReducer, applyMiddleware(promise))}>
     <App />
-  </React.StrictMode>,
+  </Provider>,
   document.getElementById("root")
 );
 
