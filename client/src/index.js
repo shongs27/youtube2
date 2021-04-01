@@ -9,9 +9,15 @@ import { createStore, applyMiddleware } from "redux";
 import promise from "redux-promise";
 import rootReducer from "./_redux";
 import { Provider } from "react-redux";
+import { composeWithDevTools } from "redux-devtools-extension";
 
 ReactDOM.render(
-  <Provider store={createStore(rootReducer, applyMiddleware(promise))}>
+  <Provider
+    store={createStore(
+      rootReducer,
+      composeWithDevTools(applyMiddleware(promise))
+    )}
+  >
     <App />
   </Provider>,
   document.getElementById("root")

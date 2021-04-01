@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const { User } = require("../models/User");
+const { auth } = require("./middleware/auth");
 
 router.post("/register", (req, res) => {
   const user = new User(req.body);
@@ -13,20 +14,28 @@ router.post("/register", (req, res) => {
 });
 
 router.post("/login", (req, res) => {
-  User.findOne(req.body, (err, user) => {
-    if (!user) {
-      return res.json({
-        try: false,
-        err,
-        message: "없는데 그런 사람?",
+  User.findOne({ email: req.body.email }, (err, user) => {
+    if (!user) return res.json({ try: false, err });
+
+    if (user.password === req.body.password) {
+      user.generateToken((err, user) => {
+        if (err) return res.json({ try: false, err });
+
+        res.status(200).json({ try: true, userId: user._id });
       });
     } else {
-      return res.json({
-        try: true,
-        err,
-        message: "찾았다 내사람",
-      });
+      return res.json({ try: false, err });
     }
+  });
+});
+
+router.get("/auth", auth, (req, res) => {
+  res.status(200).json({
+    _id: req.user._id,
+    isAuth: true,
+    email: req.user.email,
+    name: req.user.name,
+    //password뺴고 다 보내네
   });
 });
 

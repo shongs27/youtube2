@@ -34,9 +34,9 @@ function RegisterPage(props) {
 
           dispatch(registerUser(registerForm))
             .then((res) => {
-              // dispatch 에 결과값은 reducer의 return값이어야 하는거 아닌가?
               console.log(res);
-              if (res) {
+              // dispatch 에 결과값은 액션함수의 객체다
+              if (res.payload.try) {
                 message.info("회원등록 성공");
                 props.history.push("/login");
               } else {

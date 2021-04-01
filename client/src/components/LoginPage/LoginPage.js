@@ -1,13 +1,20 @@
-import React from "react";
-import Axios from "axios";
-import { Formik, validateYupSchema } from "formik";
+import React, { useState } from "react";
+import { Formik } from "formik";
 import * as Yup from "yup";
 import { Form, Input, Button, Checkbox, message } from "antd";
 import { Icon } from "antd";
-import { USER_SERVER } from "../config";
-import { set } from "mongoose";
+
+import { useDispatch } from "react-redux";
+import { loginUser } from "../../_redux/user_actions";
 
 const LoginPage = (props) => {
+  const dispatch = useDispatch();
+
+  const [rememberMe, SetrememberMe] = useState(false);
+
+  const handleRememberme = () => {
+    SetrememberMe(!rememberMe);
+  };
   return (
     <Formik
       initialValues={{ email: "", password: "" }}
@@ -21,11 +28,26 @@ const LoginPage = (props) => {
       })}
       onSubmit={(values, { setSubmitting }) => {
         let LoginForm = {
-          password: values.password,
           email: values.email,
+          password: values.password,
         };
+
+        //////// 1번 promise 객체
+        dispatch(loginUser(LoginForm))
+          .then((res) => {
+            if (res.payload.try) {
+              //localstorage는 백엔드가 아니라 프론트엔드부분이다
+              localStorage.setItem("인증", res.payload.userId);
+              message.info("성공했어.. 보여줄꼐 로그인정보");
+              props.history.push("/");
+            } else {
+              message.info("실패했어.. 왤까?");
+            }
+          })
+          .then(setSubmitting(false));
+
+        /////////// 2번 async await
         // foo();
-        // //1번 async await
         // async function foo() {
         //   const res = await Axios.post(`${USER_SERVER}/login`, LoginForm);
         //   if (res.data.try) {
@@ -37,19 +59,6 @@ const LoginPage = (props) => {
         //   }
         //   setSubmitting(false);
         // }
-
-        // 2번
-        Axios.post(`${USER_SERVER}/login`, LoginForm)
-          .then((res) => {
-            if (res.data.try) {
-              message.info("로그인 성공");
-              // props.history.push("/landing");
-            } else {
-              console.log(res.data.err);
-              message.info("로그인 실패했습니다");
-            }
-          })
-          .then(setSubmitting(false));
       }}
     >
       {({
@@ -121,7 +130,9 @@ const LoginPage = (props) => {
             </Form.Item>
             <br />
             <Form.Item name="remember" valuePropName="checked">
-              <Checkbox>Remember me</Checkbox>
+              <Checkbox onChange={handleRememberme} checked={rememberMe}>
+                Remember me
+              </Checkbox>
               &nbsp; &nbsp; &nbsp;
               <a href="/register" target="_self" style={{ font: "blue" }}>
                 회원가입

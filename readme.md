@@ -7,3 +7,5 @@
 - youtube와 youtube2 서버 두개 띄어놓고 프로그래밍 하기
 - 
 2. login 
+
+valueProp지우기

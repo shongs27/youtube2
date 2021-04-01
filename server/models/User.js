@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const jwt = require("jsonwebtoken");
 
 const UserSchema = new mongoose.Schema({
   name: {
@@ -35,6 +36,29 @@ const UserSchema = new mongoose.Schema({
 //     return;
 //   }
 // });
+
+UserSchema.methods.generateToken = function (cb) {
+  var user = this;
+
+  const token = jwt.sign(user._id.toHexString(), "hongs");
+  user.token = token;
+  user.save((err, user) => {
+    if (err) return cb(err);
+
+    return cb(null, user);
+  });
+};
+
+UserSchema.statics.findbyToken = function (token, cb) {
+  //jwt복원
+  jwt.verify(token, "hongs", (err, decoded) => {
+    if (err) return res.json({ try: false, err });
+    User.findOne({ _id: decoded, token }, (err, user) => {
+      if (err) return cb(err);
+      cb(null, user);
+    });
+  });
+};
 
 const User = mongoose.model("User", UserSchema);
 
