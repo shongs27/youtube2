@@ -18,6 +18,7 @@ router.post("/login", (req, res) => {
     if (!user) return res.json({ try: false, err });
 
     if (user.password === req.body.password) {
+      //토큰을 만들어서 1. 저장소에 저장 2. 로컬cookie에 저장
       user.generateToken((err, user) => {
         if (err) return res.json({ try: false, err });
 
@@ -40,6 +41,13 @@ router.get("/auth", auth, (req, res) => {
     name: req.user.name,
     // token: req.token,
     //password뺴고 다 보내네
+  });
+});
+
+router.get("/logout", auth, (req, res) => {
+  User.findOneAndUpdate({ _id: req.user._id }, { token: "" }, (err, doc) => {
+    if (err) return res.json({ try: false, err });
+    return res.status(200).json({ try: true });
   });
 });
 

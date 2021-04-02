@@ -24,6 +24,9 @@ app.use(cookieParser());
 //Router
 
 app.use("/api/users", require("./routers/users"));
+app.use("/api/videos", require("./routers/videos"));
+
+app.use("/uploads", express.static("uploads"));
 
 app.use("/", (req, res) => {
   res.send("여기는 서버의 구역입니다");
