@@ -2,6 +2,7 @@ const express = require("express");
 const app = express();
 const path = require("path");
 const config = require("./config/key");
+const cookieParser = require("cookie-parser");
 
 const mongoose = require("mongoose");
 const connect = mongoose
@@ -16,7 +17,9 @@ const connect = mongoose
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
-// app.use(cookieParser());
+
+//쿠키 API를 다루기 위해서
+app.use(cookieParser());
 
 //Router
 

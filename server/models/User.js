@@ -49,7 +49,7 @@ UserSchema.methods.generateToken = function (cb) {
   });
 };
 
-UserSchema.statics.findbyToken = function (token, cb) {
+UserSchema.statics.findByToken = function (token, cb) {
   //jwt복원
   jwt.verify(token, "hongs", (err, decoded) => {
     if (err) return res.json({ try: false, err });

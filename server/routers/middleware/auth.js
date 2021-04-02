@@ -1,7 +1,7 @@
 const { User } = require("../../models/User");
 
 const auth = (req, res, next) => {
-  const token = localStorage.getItem("인증");
+  const token = req.cookies.Valid;
 
   User.findByToken(token, (err, user) => {
     if (err) throw err;

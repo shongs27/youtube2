@@ -21,7 +21,10 @@ router.post("/login", (req, res) => {
       user.generateToken((err, user) => {
         if (err) return res.json({ try: false, err });
 
-        res.status(200).json({ try: true, userId: user._id });
+        res
+          .cookie("Valid", user.token)
+          .status(200)
+          .json({ try: true, userId: user._id });
       });
     } else {
       return res.json({ try: false, err });
@@ -35,6 +38,7 @@ router.get("/auth", auth, (req, res) => {
     isAuth: true,
     email: req.user.email,
     name: req.user.name,
+    // token: req.token,
     //password뺴고 다 보내네
   });
 });

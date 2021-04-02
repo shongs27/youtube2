@@ -37,7 +37,8 @@ const LoginPage = (props) => {
           .then((res) => {
             if (res.payload.try) {
               //localstorage는 백엔드가 아니라 프론트엔드부분이다
-              localStorage.setItem("인증", res.payload.userId);
+              // localStorage.setItem("인증", res.payload.userId);
+              // res.cookie("Valid", res.payload.userId);
               message.info("성공했어.. 보여줄꼐 로그인정보");
               props.history.push("/");
             } else {

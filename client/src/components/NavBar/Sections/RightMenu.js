@@ -12,11 +12,11 @@ function RightMenu(props) {
   //       <a href="/register">회원가입</a>
   //     </Menu.Item>
   //     <Menu.Item>
-  //       <a href="/login">로그인</a>
+  //       <a href="/login">로그인<ap/a>
   //     </Menu.Item>
   //   </Menu>
   // );
-  console.log(user.userData);
+
   if (user.userData && user.userData.isAuth) {
     return (
       <Menu mode={props.mode}>

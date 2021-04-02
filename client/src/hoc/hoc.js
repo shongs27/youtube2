@@ -11,6 +11,7 @@ export default function (ComponentHandle, level) {
 
     useEffect(() => {
       dispatch(auth()).then((res) => {
+        console.log(res.payload);
         //권한 없는 놈이
         if (!res.payload.isAuth) {
           //감히 들어올려고 한다
