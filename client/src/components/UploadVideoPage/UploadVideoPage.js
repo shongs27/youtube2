@@ -3,15 +3,20 @@ import { Typography, Form, Icon, message } from "antd";
 import Dropzone from "react-dropzone";
 import axios from "axios";
 import { VIDEO_SERVER } from "../config";
+import { useSelector } from "react-redux";
 const { Title } = Typography;
 
 function UploadVideoPage() {
-  const ThumbnailPath = 1;
+  const user = useSelector((state) => state.user);
+  console.log(user);
 
   const [VideoTitle, setTitleChange] = useState("");
   const [Description, setDescriptionChange] = useState("");
   const [Category, setCategoryChange] = useState("dog");
   const [FilePath, setFilePath] = useState("");
+  //썸네일
+  const [Duration, setDuration] = useState("");
+  const [ThumbnailPath, setThumbnailPath] = useState("");
 
   const onTitleChange = (e) => {
     setTitleChange(e.target.value);
@@ -35,10 +40,13 @@ function UploadVideoPage() {
     e.preventDefault();
 
     const FormList = {
+      Writer: user.userData._id,
       Title: VideoTitle,
       Description: Description,
       Category: Category,
       FilePath: FilePath,
+      Duration,
+      ThumbnailPath,
     };
 
     axios.post(`${VIDEO_SERVER}/uploadVideo`, FormList).then((res) => {
@@ -50,17 +58,16 @@ function UploadVideoPage() {
     });
   };
 
-  const onDrop = (file) => {
-    //application/x-www-form-urlencoded 가 아닌 multipart/form-data의 형태로 전송해야 한다
-    // 그러기 위해 formData로 바꾸어준다
-
+  const onDrop = (files) => {
+    //용량이 큰 미디어 파일은 application/x-www-form-urlencoded 가 아닌 multipart/form-data의 형태로 전송해야 한다
+    // <form enctype = "multipart/form-data">라고 하거나 axios를 이용하면 된다
     const formData = new FormData();
 
     const config = {
       header: { "content-type": "multipart/form-data" },
     };
 
-    formData.append("file", files[0]);
+    formData.append("thatData", files[0]);
 
     axios.post(`${VIDEO_SERVER}/uploadfiles`, formData, config).then((res) => {
       if (res.data.try) {
@@ -72,6 +79,17 @@ function UploadVideoPage() {
         setFilePath(res.data.url);
 
         // 썸네일도 만들기
+
+        axios.post(`${VIDEO_SERVER}/thumbnail`, variable).then((res) => {
+          if (res.data.try) {
+            setDuration(res.data.fileDuration);
+            setThumbnailPath(res.data.url);
+          } else {
+            message.info("썸네일 생성에 실패했습니다");
+          }
+        });
+      } else {
+        message.info("비디오 업로드에 실패했습니다");
       }
     });
   };
@@ -133,8 +151,9 @@ function UploadVideoPage() {
             </option>
           ))}
         </select>
-
-        <button onClick={onSubmit}></button>
+        <br />
+        <br />
+        <button onClick={onSubmit}>제출</button>
       </Form>
     </div>
   );

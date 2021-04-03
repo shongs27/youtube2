@@ -3,27 +3,30 @@ const { User } = require("./User");
 
 const VideoSchema = new mongoose.Schema(
   {
-    writer: {
+    Writer: {
       type: mongoose.ObjectId,
       ref: User,
     },
-    title: {
+    Title: {
       type: String,
     },
-    views: {
+    Views: {
       type: Number,
       defulat: 0,
     },
-    description: {
+    Description: {
       type: String,
     },
-    category: {
+    Category: {
       type: String,
     },
-    filePath: {
+    FilePath: {
       type: String,
     },
-    thumbnail: {
+    Duration: {
+      type: Number,
+    },
+    ThumbnailPath: {
       type: String,
     },
   },
