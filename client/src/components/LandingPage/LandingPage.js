@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from "react";
 
-import { Row, Col, Typography, message } from "antd";
+import { Row, Col, Typography, message, Card } from "antd";
 import axios from "axios";
 import { VIDEO_SERVER } from "../config";
 const { Title } = Typography;
+const { Meta } = Card;
 
 function LandingPage() {
   const [Videos, setVideos] = useState([]);
@@ -22,7 +23,9 @@ function LandingPage() {
   }, []);
 
   const RenderVideo = Videos.map((video, index) => {
-    console.log(video._id);
+    const minutes = Math.floor(video.Duration / 60);
+    const seconds = Math.floor(video.Duration - minutes * 60);
+
     return (
       <Col lg={6} md={8} xs={24}>
         <div style={{ position: "relative" }}>
@@ -31,8 +34,16 @@ function LandingPage() {
               style={{ width: "100%" }}
               src={`http://localhost:8080/${video.ThumbnailPath}`}
             />
+            <div className="duration">
+              <span>
+                {minutes}:{seconds}
+              </span>
+            </div>
           </a>
         </div>
+
+        <br />
+        <Meta title={video.Title} discription={video.Description} />
       </Col>
     );
   });

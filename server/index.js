@@ -25,6 +25,8 @@ app.use(cookieParser());
 
 app.use("/api/users", require("./routers/users"));
 app.use("/api/videos", require("./routers/videos"));
+app.use("/api/like", require("./routers/likes"));
+app.use("/api/comments", require("./routers/comments"));
 
 app.use("/uploads", express.static("uploads"));
 

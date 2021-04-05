@@ -12,6 +12,7 @@
    렌더링 hoc를 통해 auth를 발생시킴으로서 token을 소유하고 있는지 계속 확인함
 
 
-랜딩페이지 마무리 필요, 디테일 페이지 끝내기
+like dislike 오류
+
 
 valueProp지우기

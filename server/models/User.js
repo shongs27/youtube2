@@ -52,7 +52,6 @@ UserSchema.methods.generateToken = function (cb) {
 UserSchema.statics.findByToken = function (token, cb) {
   //jwt복원
   jwt.verify(token, "hongs", (err, decoded) => {
-    if (err) return res.json({ try: false, err });
     User.findOne({ _id: decoded, token }, (err, user) => {
       if (err) return cb(err);
       cb(null, user);

@@ -12,6 +12,15 @@ const ffmpeg = require("fluent-ffmpeg");
 //   Video는 전송하려면 특이하게 해야한다 (거꾸로 기입함)
 //=======================================
 
+router.post("/getVideoDetail", (req, res) => {
+  Video.findOne({ _id: req.body.videoId })
+    .populate("Writer")
+    .exec((err, video) => {
+      if (err) return res.status(400).send(err);
+      return res.status(200).json({ try: true, video });
+    });
+});
+
 router.get("/getVideos", (req, res) => {
   Video.find()
     .populate("Writer")
