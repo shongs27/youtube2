@@ -13,9 +13,11 @@ const ffmpeg = require("fluent-ffmpeg");
 //=======================================
 
 router.post("/getVideoDetail", (req, res) => {
+  
   Video.findOne({ _id: req.body.videoId })
-    .populate("Writer")
+    .populate("writer")
     .exec((err, video) => {
+      console.log(video)
       if (err) return res.status(400).send(err);
       return res.status(200).json({ try: true, video });
     });
@@ -23,8 +25,9 @@ router.post("/getVideoDetail", (req, res) => {
 
 router.get("/getVideos", (req, res) => {
   Video.find()
-    .populate("Writer")
+    .populate("writer")
     .exec((err, videos) => {
+      //여러개일때 배열의 형태로 반환하네
       if (err) res.status(400).send(err);
       res.status(200).json({ try: true, videos });
     });

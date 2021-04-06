@@ -8,7 +8,7 @@ const { Title } = Typography;
 
 function UploadVideoPage() {
   const user = useSelector((state) => state.user);
-  console.log(user);
+  
 
   const [VideoTitle, setTitleChange] = useState("");
   const [Description, setDescriptionChange] = useState("");
@@ -40,10 +40,10 @@ function UploadVideoPage() {
     e.preventDefault();
 
     const FormList = {
-      Writer: user.userData._id,
-      Title: VideoTitle,
-      Description: Description,
-      Category: Category,
+      writer: user.userData._id,
+      title: VideoTitle,
+      description: Description,
+      category: Category,
       FilePath: FilePath,
       Duration,
       ThumbnailPath,
@@ -52,6 +52,7 @@ function UploadVideoPage() {
     axios.post(`${VIDEO_SERVER}/uploadVideo`, FormList).then((res) => {
       if (res.data.try) {
         message.success("성공적으로 업로드했습니다");
+       
       } else {
         message.info("비디오 업로드에 실패했습니다");
       }

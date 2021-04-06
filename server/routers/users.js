@@ -33,13 +33,14 @@ router.post("/login", (req, res) => {
   });
 });
 
+// 미들웨어 auth를 통해 유저정보 user가 res로 돌아오겠지
 router.get("/auth", auth, (req, res) => {
   res.status(200).json({
     _id: req.user._id,
     isAuth: true,
     email: req.user.email,
     name: req.user.name,
-    // token: req.token,
+    token: req.token,
     //password뺴고 다 보내네
   });
 });

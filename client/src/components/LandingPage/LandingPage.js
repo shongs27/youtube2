@@ -27,6 +27,7 @@ function LandingPage() {
     const seconds = Math.floor(video.Duration - minutes * 60);
 
     return (
+      // grid 형태로 불러와지니깐 Row, Col을 썻지
       <Col lg={6} md={8} xs={24}>
         <div style={{ position: "relative" }}>
           <a href={`/video/${video._id}`}>

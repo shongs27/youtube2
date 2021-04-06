@@ -20,8 +20,9 @@ function LikeDislike(props) {
   useEffect(() => {
     axios.post("/api/like/getLikes", variable).then((res) => {
       if (res.data.try) {
+        // likes는 배열로 저장되어 있을 것이기에
         setLikes(res.data.likes.length);
-        console.log(res.data.likes);
+
         res.data.likes.map((like) => {
           if (like.userId === props.userId) {
             setLikeAction("liked");
@@ -34,12 +35,10 @@ function LikeDislike(props) {
 
     axios.post("/api/like/getDislikes", variable).then((res) => {
       if (res.data.try) {
-        //얼마나 많은 좋아요를 받았는지
         setDislikes(res.data.dislikes.length);
 
-        //내가 이미 그 좋아요를 눌렀는지
         res.data.dislikes.map((dislike) => {
-          //누른 사람중에 내 아이디가 있는지 확인
+          //dislike 누른 사람중에 내 아이디가 있는지 확인
           if (dislike.userId === props.userId) {
             setDislikeAction("disliked");
           }
@@ -70,7 +69,7 @@ function LikeDislike(props) {
     } else {
       //2. 이미 클릭이 되어있을때
       axios.post("/api/like/unlike", variable).then((res) => {
-        if (res.data.success) {
+        if (res.data.try) {
           setLikes(Likes - 1);
           setLikeAction(null);
         } else {

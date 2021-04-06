@@ -38,14 +38,14 @@ router.post("/uplike", (req, res) => {
   } else {
     variable = { commentId: req.body.commentId, userId: req.body.userId };
   }
-  console.log(variable);
+
   const like = new Likes(variable);
   like.save((err, likeResult) => {
     if (err) return res.json({ try: false, err });
 
     Dislikes.findOneAndDelete(variable).exec((err, dislikeResult) => {
       if (err) return res.json({ try: false, err });
-      res.json(200).json({ try: true });
+      res.status(200).json({ try: true });
     });
   });
 });
@@ -60,7 +60,7 @@ router.post("/unlike", (req, res) => {
 
   Likes.findOneAndDelete(variable).exec((err, likeResult) => {
     if (err) return res.json({ try: false, err });
-    res.json(200).json({ try: true });
+    res.status(200).json({ try: true });
   });
 });
 
@@ -78,7 +78,7 @@ router.post("/upDislike", (req, res) => {
 
     Likes.findOneAndDelete(variable).exec((err, LikeResult) => {
       if (err) return res.json({ try: false, err });
-      res.json(200).json({ try: true });
+      res.status(200).json({ try: true });
     });
   });
 });
@@ -93,7 +93,7 @@ router.post("/unDislike", (req, res) => {
 
   Dislikes.findOneAndDelete(variable).exec((err, DislikeResult) => {
     if (err) return res.json({ try: false, err });
-    res.json(200).json({ try: true });
+    res.status(200).json({ try: true });
   });
 });
 
